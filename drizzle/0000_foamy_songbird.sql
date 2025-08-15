@@ -68,11 +68,9 @@ CREATE TABLE "products" (
 );
 --> statement-breakpoint
 CREATE TABLE "sessions" (
-	"id" varchar PRIMARY KEY NOT NULL,
-	"session_token" varchar(255) NOT NULL,
+	"session_token" varchar(255) PRIMARY KEY NOT NULL,
 	"user_id" varchar NOT NULL,
-	"expires" timestamp NOT NULL,
-	CONSTRAINT "sessions_session_token_unique" UNIQUE("session_token")
+	"expires" timestamp NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "users" (

@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1755050647103,
-      "tag": "0000_marvelous_dragon_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1755180112284,
-      "tag": "0001_tense_wilson_fisk",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1755180353246,
-      "tag": "0002_yielding_black_crow",
+      "when": 1755237944370,
+      "tag": "0000_foamy_songbird",
       "breakpoints": true
     }
   ]

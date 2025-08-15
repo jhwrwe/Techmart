@@ -1,5 +1,5 @@
 {
-  "id": "e97b1b09-44d4-4084-9d53-af137fe84b35",
+  "id": "f32ad2ba-0a15-4d8e-9885-c5737005c5c1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -671,16 +671,10 @@
       "name": "sessions",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
         "session_token": {
           "name": "session_token",
           "type": "varchar(255)",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "user_id": {
@@ -744,15 +738,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "sessions_session_token_unique": {
-          "name": "sessions_session_token_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "session_token"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
