@@ -4,8 +4,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db } from '@/lib/db'
 import { env } from '@/lib/env'
 import { users, accounts, sessions, verificationTokens } from '@/lib/db/schema'
-
-
+import type { Session } from 'next-auth'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db, {
@@ -25,22 +24,39 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: '/auth/error',
   },
   callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id
-        session.user.role = (user as any).role || 'user'
+    async session({ session, user }): Promise<Session> {
+      const s = session as unknown as Record<string, unknown> & {
+        user?: Record<string, unknown>
       }
-      return session
+
+      if (s.user && typeof user === 'object' && user !== null) {
+        const u = user as unknown as Record<string, unknown>
+
+        if (typeof u['id'] === 'string' || typeof u['id'] === 'number') {
+          s.user!['id'] = u['id']
+        }
+
+        s.user!['role'] = typeof u['role'] === 'string' ? u['role'] : 'user'
+      }
+
+      return s as unknown as Session
     },
+
     async jwt({ token, user }) {
-      if (user) {
-        token.role = (user as any).role
+      const t = token as Record<string, unknown>
+
+      if (typeof user === 'object' && user !== null) {
+        const u = user as unknown as Record<string, unknown>
+        if (typeof u['role'] === 'string') {
+          t['role'] = u['role']
+        }
       }
-      return token
+
+      return t
     },
   },
   events: {
-    async signIn({ user, account, profile, isNewUser }) {
+    async signIn({ user, account, isNewUser }) {
       console.log('User signed in', {
         email: user.email,
         isNewUser,

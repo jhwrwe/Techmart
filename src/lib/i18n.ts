@@ -1,3 +1,5 @@
+// ./src/lib/i18n.ts
+
 export const translations = {
   en: {
     home: {
@@ -71,19 +73,23 @@ export const translations = {
       checkout: 'Lanjut ke Pembayaran'
     }
   }
-}
+} as const
 
-export type Locale = 'en' | 'id'
+export type Locale = keyof typeof translations
 
 export function getTranslation(locale: Locale, key: string): string {
   const keys = key.split('.')
-  let value: any = translations[locale]
-  
+  let value: unknown = translations[locale]
+
   for (const k of keys) {
-    value = value?.[k]
+    if (typeof value === 'object' && value !== null && k in (value as Record<string, unknown>)) {
+      value = (value as Record<string, unknown>)[k]
+    } else {
+      return key
+    }
   }
-  
-  return value || key
+
+  return typeof value === 'string' ? value : key
 }
 
 export function t(locale: Locale, key: string): string {
@@ -101,4 +107,4 @@ export const authTranslations = {
     signInToYourAccount: 'Masuk ke akun Anda',
     signInWithGoogle: 'Masuk dengan Google'
   }
-}
+} as const

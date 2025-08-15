@@ -1,9 +1,6 @@
-// src/components/AddToCartButton.tsx
-
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 
 interface Product {
   id: number
@@ -26,7 +23,7 @@ interface CartItem {
 
 interface AddToCartButtonProps {
   product: Product
-  locale: string
+  locale: 'en' | 'id'
   quantity?: number
   className?: string
   showQuantitySelector?: boolean
@@ -39,17 +36,31 @@ export default function AddToCartButton({
   className = '',
   showQuantitySelector = false
 }: AddToCartButtonProps) {
-  const [selectedQuantity, setSelectedQuantity] = useState(quantity)
+  const [selectedQuantity, setSelectedQuantity] = useState<number>(() => Math.max(1, quantity))
   const [isAdding, setIsAdding] = useState(false)
   const [cartItems, setCartItems] = useState<CartItem[]>([])
-  const router = useRouter()
 
+  // Load cart dari localStorage dengan safe parsing
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart')
-    if (savedCart) {
-      setCartItems(JSON.parse(savedCart))
+    try {
+      const savedCart = localStorage.getItem('cart')
+      if (savedCart) {
+        const parsed = JSON.parse(savedCart)
+        if (Array.isArray(parsed)) {
+          setCartItems(parsed)
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to parse saved cart from localStorage', e)
     }
   }, [])
+
+  useEffect(() => {
+    setSelectedQuantity(prev => {
+      const desired = Math.max(1, quantity ?? prev)
+      return Math.min(desired, product.stock || 1)
+    })
+  }, [quantity, product.stock])
 
   const addToCart = async () => {
     if (product.stock < selectedQuantity) {
@@ -61,24 +72,31 @@ export default function AddToCartButton({
 
     try {
       const existingItemIndex = cartItems.findIndex(item => item.id === product.id)
-      let updatedCart: CartItem[]
+      let updatedCart: CartItem[] = []
 
       if (existingItemIndex >= 0) {
         updatedCart = [...cartItems]
         const newQuantity = updatedCart[existingItemIndex].quantity + selectedQuantity
-        
+
         if (newQuantity > product.stock) {
           alert(`Cannot add more items. Only ${product.stock} available in stock.`)
           setIsAdding(false)
           return
         }
 
-        updatedCart[existingItemIndex].quantity = newQuantity
+        updatedCart[existingItemIndex] = {
+          ...updatedCart[existingItemIndex],
+          quantity: newQuantity,
+          stock: product.stock,
+        }
       } else {
+        const rawPrice = typeof product.price === 'string' ? parseFloat(product.price) : product.price
+        const priceNumber = Number.isFinite(rawPrice) ? Number(rawPrice) : 0
+
         const newItem: CartItem = {
           id: product.id,
           name: locale === 'id' && product.nameId ? product.nameId : (product.nameEn || product.name),
-          price: typeof product.price === 'string' ? parseFloat(product.price) : product.price,
+          price: priceNumber,
           quantity: selectedQuantity,
           imageUrl: product.imageUrl || undefined,
           stock: product.stock
@@ -86,12 +104,14 @@ export default function AddToCartButton({
         updatedCart = [...cartItems, newItem]
       }
 
-      localStorage.setItem('cart', JSON.stringify(updatedCart))
+      try {
+        localStorage.setItem('cart', JSON.stringify(updatedCart))
+      } catch (e) {
+        console.warn('Failed to save cart to localStorage', e)
+      }
       setCartItems(updatedCart)
 
       alert('Product added to cart!')
-      
-      
     } catch (error) {
       console.error('Error adding to cart:', error)
       alert('Failed to add product to cart')
@@ -113,7 +133,7 @@ export default function AddToCartButton({
           <div className="flex items-center space-x-2">
             <button
               type="button"
-              onClick={() => setSelectedQuantity(Math.max(1, selectedQuantity - 1))}
+              onClick={() => setSelectedQuantity(prev => Math.max(1, prev - 1))}
               disabled={selectedQuantity <= 1}
               className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -122,7 +142,7 @@ export default function AddToCartButton({
             <span className="font-semibold text-lg w-8 text-center">{selectedQuantity}</span>
             <button
               type="button"
-              onClick={() => setSelectedQuantity(Math.min(product.stock, selectedQuantity + 1))}
+              onClick={() => setSelectedQuantity(prev => Math.min(product.stock, prev + 1))}
               disabled={selectedQuantity >= product.stock}
               className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >

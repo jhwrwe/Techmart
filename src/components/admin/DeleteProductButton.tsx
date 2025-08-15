@@ -6,13 +6,12 @@ import { useRouter } from 'next/navigation'
 interface DeleteProductButtonProps {
   productId: number
   productName: string
-  locale: string
 }
 
 export default function DeleteProductButton({
   productId,
   productName,
-  locale
+  
 }: DeleteProductButtonProps) {
   const [isDeleting, setIsDeleting] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
@@ -74,7 +73,7 @@ export default function DeleteProductButton({
           
           <div className="mb-6">
             <p className="text-gray-600 mb-3">
-              Are you sure you want to delete <strong>"{productName}"</strong>?
+              Are you sure you want to delete <strong>&quot;{productName}&quot;</strong>?
             </p>
             <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
               <div className="flex">
