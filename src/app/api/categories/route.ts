@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { categories } from '@/lib/db/schema'
 import { like, and, desc } from 'drizzle-orm'
-import { auth } from '@/lib/auth/config'
+import type { SQL } from 'drizzle-orm' 
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const locale = searchParams.get('locale') || 'en'
     const search = searchParams.get('search')
-    
+
     const query = db
       .select({
         id: categories.id,
@@ -23,8 +23,8 @@ export async function GET(request: NextRequest) {
       })
       .from(categories)
 
-    const conditions: any[] = []
-    
+    const conditions: SQL[] = []
+
     if (search) {
       conditions.push(
         locale === 'id'
