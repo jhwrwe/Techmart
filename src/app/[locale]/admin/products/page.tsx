@@ -208,7 +208,6 @@ export default async function AdminProductsPage({
                     <DeleteProductButton 
                       productId={product.id}
                       productName={product.name}
-                      locale={locale}
                     />
                   </td>
                 </tr>

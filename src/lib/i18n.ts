@@ -1,22 +1,61 @@
-export const translations = {
+export type TranslationSchema = {
+  home: {
+    title: string
+    subtitle: string
+    viewAllProducts: string
+    featuredProducts: string
+  }
+  nav: {
+    home: string
+    products: string
+    signin: string
+    admin: string
+    account: string
+  }
+  auth: {
+    welcome: string
+    signInToYourAccount: string
+    signInWithGoogle: string
+  }
+  products: {
+    title: string
+    search: string
+    category: string
+    price: string
+    inStock: string
+    outOfStock: string
+    addToCart: string
+  }
+  cart: {
+    title: string
+    empty: string
+    remove: string
+    total: string
+    checkout: string
+  }
+}
+
+export type TranslationsMap = Record<'en' | 'id', TranslationSchema>
+
+export const translations: TranslationsMap = {
   en: {
     home: {
       title: 'Welcome to TechMart',
       subtitle: 'Your Electronics Destination',
       viewAllProducts: 'View All Products',
-      featuredProducts: 'Featured Products'
+      featuredProducts: 'Featured Products',
     },
     nav: {
       home: 'Home',
       products: 'Products',
       signin: 'Sign In',
       admin: 'Admin',
-      account: 'Account'
+      account: 'Account',
     },
     auth: {
       welcome: 'Welcome back',
       signInToYourAccount: 'Sign in to your account',
-      signInWithGoogle: 'Sign in with Google'
+      signInWithGoogle: 'Sign in with Google',
     },
     products: {
       title: 'Products',
@@ -25,34 +64,34 @@ export const translations = {
       price: 'Price',
       inStock: 'In Stock',
       outOfStock: 'Out of Stock',
-      addToCart: 'Add to Cart'
+      addToCart: 'Add to Cart',
     },
     cart: {
       title: 'Shopping Cart',
       empty: 'Your cart is empty',
       remove: 'Remove',
       total: 'Total',
-      checkout: 'Proceed to Checkout'
-    }
+      checkout: 'Proceed to Checkout',
+    },
   },
   id: {
     home: {
       title: 'Selamat Datang di TechMart',
       subtitle: 'Destinasi Elektronik Anda',
       viewAllProducts: 'Lihat Semua Produk',
-      featuredProducts: 'Produk Unggulan'
+      featuredProducts: 'Produk Unggulan',
     },
     nav: {
       home: 'Beranda',
       products: 'Produk',
       signin: 'Masuk',
       admin: 'Admin',
-      account: 'Akun'
+      account: 'Akun',
     },
     auth: {
       welcome: 'Selamat datang kembali',
       signInToYourAccount: 'Masuk ke akun Anda',
-      signInWithGoogle: 'Masuk dengan Google'
+      signInWithGoogle: 'Masuk dengan Google',
     },
     products: {
       title: 'Produk',
@@ -61,26 +100,27 @@ export const translations = {
       price: 'Harga',
       inStock: 'Tersedia',
       outOfStock: 'Habis',
-      addToCart: 'Tambah ke Keranjang'
+      addToCart: 'Tambah ke Keranjang',
     },
     cart: {
       title: 'Keranjang Belanja',
       empty: 'Keranjang Anda kosong',
       remove: 'Hapus',
       total: 'Total',
-      checkout: 'Lanjut ke Pembayaran'
-    }
-  }
-} as const
+      checkout: 'Lanjut ke Pembayaran',
+    },
+  },
+}
 
 export type Locale = keyof typeof translations
 
+
 export function getTranslation(locale: Locale, key: string): string {
   const keys = key.split('.')
-  let value: unknown = translations[locale]
-
+  let value: unknown = translations[locale] 
   for (const k of keys) {
-    if (typeof value === 'object' && value !== null && k in (value as Record<string, unknown>)) {
+    if (typeof value === 'object' && value !== null && Object.prototype.hasOwnProperty.call(value, k)) {
+     
       value = (value as Record<string, unknown>)[k]
     } else {
       return key
@@ -98,11 +138,11 @@ export const authTranslations = {
   en: {
     welcome: 'Welcome back',
     signInToYourAccount: 'Sign in to your account',
-    signInWithGoogle: 'Sign in with Google'
+    signInWithGoogle: 'Sign in with Google',
   },
   id: {
     welcome: 'Selamat datang kembali',
     signInToYourAccount: 'Masuk ke akun Anda',
-    signInWithGoogle: 'Masuk dengan Google'
-  }
+    signInWithGoogle: 'Masuk dengan Google',
+  },
 } as const

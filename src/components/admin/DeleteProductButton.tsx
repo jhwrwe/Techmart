@@ -11,7 +11,6 @@ interface DeleteProductButtonProps {
 export default function DeleteProductButton({
   productId,
   productName,
-  
 }: DeleteProductButtonProps) {
   const [isDeleting, setIsDeleting] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
@@ -19,7 +18,7 @@ export default function DeleteProductButton({
 
   const handleDelete = async () => {
     setIsDeleting(true)
-    
+
     try {
       const response = await fetch(`/api/admin/products/${productId}`, {
         method: 'DELETE',
@@ -27,20 +26,20 @@ export default function DeleteProductButton({
           'Content-Type': 'application/json',
         },
       })
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      
+
       const data = await response.json()
-      
+
       if (data.success) {
         if (data.deactivated) {
           alert('Product has existing orders and was deactivated instead of deleted.')
         } else if (data.deleted) {
           alert('Product deleted successfully!')
         }
-        
+
         router.refresh()
       } else {
         throw new Error(data.error || 'Failed to delete product')
@@ -69,7 +68,7 @@ export default function DeleteProductButton({
               Confirm Deletion
             </h3>
           </div>
-          
+
           <div className="mb-6">
             <p className="text-gray-600 mb-3">
               Are you sure you want to delete <strong>&quot;{productName}&quot;</strong>?
@@ -89,7 +88,7 @@ export default function DeleteProductButton({
               </div>
             </div>
           </div>
-          
+
           <div className="flex justify-end space-x-3">
             <button
               onClick={() => setShowConfirm(false)}

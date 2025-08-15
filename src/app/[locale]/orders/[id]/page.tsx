@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import Link from 'next/link'
 import { auth } from '@/lib/auth/config'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
@@ -37,11 +39,11 @@ interface OrderDetail {
 export default async function OrderDetailPage({
   params
 }: {
-  params: Promise<{ locale: string; id: string }>
+  params: { locale: string; id: string }
 }) {
-  const { locale, id } = await params
+  const { locale, id } = params
   const session = await auth()
-  
+
   if (!session?.user) {
     redirect(`/${locale}/auth/signin`)
   }
@@ -70,24 +72,23 @@ export default async function OrderDetailPage({
     return (
       <div className="max-w-4xl mx-auto text-center py-12">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">Order Not Found</h1>
-        <p className="text-gray-600 mb-8">The order you're looking for doesn't exist.</p>
-        <a
+        <p className="text-gray-600 mb-8">The order you&apos;re looking for doesn&apos;t exist.</p>
+        <Link
           href={`/${locale}/account`}
           className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
         >
           Back to Account
-        </a>
+        </Link>
       </div>
     )
   }
 
   const order = orderData[0]
 
-  if (session.user.role !== 'admin' && order.userId !== session.user.id) {
+  if (session.user.role !== 'admin' && String(order.userId) !== String(session.user.id)) {
     redirect(`/${locale}/account`)
   }
 
-  // Get order items
   const orderItemsData = await db
     .select({
       id: orderItems.id,
@@ -115,7 +116,7 @@ export default async function OrderDetailPage({
     createdAt: order.createdAt,
     updatedAt: order.updatedAt,
     user: order.userId ? {
-      id: order.userId,
+      id: String(order.userId),
       name: order.userName,
       email: order.userEmail
     } : null,
@@ -147,12 +148,12 @@ export default async function OrderDetailPage({
             Placed on {orderDetail.createdAt.toLocaleDateString()} at {orderDetail.createdAt.toLocaleTimeString()}
           </p>
         </div>
-        <a
+        <Link
           href={`/${locale}/account`}
           className="btn-secondary"
         >
           ← Back to Account
-        </a>
+        </Link>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -209,7 +210,6 @@ export default async function OrderDetailPage({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Order Items */}
         <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Items Ordered</h2>
           
@@ -218,22 +218,20 @@ export default async function OrderDetailPage({
               <div key={item.id} className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg">
                 <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                   {item.product?.imageUrl ? (
-                    <img
+                    <Image
                       src={item.product.imageUrl}
                       alt={item.product.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.nextElementSibling!.classList.remove('hidden');
-                      }}
+                      width={64}
+                      height={64}
+                      style={{ objectFit: 'cover' }}
                     />
-                  ) : null}
-                  <div className={`w-full h-full flex items-center justify-center text-gray-400 ${item.product?.imageUrl ? 'hidden' : ''}`}>
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
-                  </div>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex-1">
@@ -320,14 +318,14 @@ export default async function OrderDetailPage({
           <div className="bg-blue-50 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-blue-900 mb-2">Need Help?</h3>
             <p className="text-blue-700 text-sm mb-4">
-              Have questions about your order? We're here to help!
+              Have questions about your order? We&apos;re here to help!
             </p>
-            <a
+            <Link
               href={`/${locale}/contact`}
               className="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Contact Support
-            </a>
+            </Link>
           </div>
         </div>
       </div>

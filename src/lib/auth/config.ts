@@ -24,13 +24,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: '/auth/error',
   },
   callbacks: {
-    async session({ session, user }): Promise<Session> {
+    // explicitly type parameters to avoid implicit `any`
+    async session({
+      session,
+      user,
+    }: {
+      session: Session
+      user: unknown
+    }): Promise<Session> {
       const s = session as unknown as Record<string, unknown> & {
         user?: Record<string, unknown>
       }
 
       if (s.user && typeof user === 'object' && user !== null) {
-        const u = user as unknown as Record<string, unknown>
+        const u = user as Record<string, unknown>
 
         if (typeof u['id'] === 'string' || typeof u['id'] === 'number') {
           s.user!['id'] = u['id']
@@ -42,11 +49,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return s as unknown as Session
     },
 
-    async jwt({ token, user }) {
-      const t = token as Record<string, unknown>
+    async jwt({
+      token,
+      user,
+    }: {
+      token: Record<string, unknown>
+      user?: unknown
+    }): Promise<Record<string, unknown>> {
+      const t = { ...token } as Record<string, unknown>
 
       if (typeof user === 'object' && user !== null) {
-        const u = user as unknown as Record<string, unknown>
+        const u = user as Record<string, unknown>
         if (typeof u['role'] === 'string') {
           t['role'] = u['role']
         }
@@ -62,6 +75,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         isNewUser,
         provider: account?.provider,
       })
-    }
-  }
+    },
+  },
 })

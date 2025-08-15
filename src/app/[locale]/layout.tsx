@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import Link from 'next/link'
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/lib/auth/config'
 import { Inter } from 'next/font/google'
@@ -13,16 +15,16 @@ export const metadata = {
 
 type LocaleLayoutProps = {
   children: React.ReactNode
-  params: Promise<{ locale: string }>
+  params: { locale: string } 
 }
 
 export default async function LocaleLayout({
   children,
   params
 }: LocaleLayoutProps) {
-  const { locale } = await params
+  const { locale } = params
   const session = await auth()
-  
+
   const validLocale = (['en', 'id'].includes(locale) ? locale : 'en') as Locale
 
   return (
@@ -35,70 +37,72 @@ export default async function LocaleLayout({
                 <div className="flex justify-between h-16">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <h1 className="text-xl font-bold text-gray-900">
-                        TechMart
-                      </h1>
+                      <h1 className="text-xl font-bold text-gray-900">TechMart</h1>
                     </div>
+
                     <div className="ml-10 flex space-x-8">
-                      <a href={`/${validLocale}`} className="text-gray-500 hover:text-gray-700">
+                      <Link href={`/${validLocale}`} className="text-gray-500 hover:text-gray-700">
                         {t(validLocale, 'nav.home')}
-                      </a>
-                      <a href={`/${validLocale}/products`} className="text-gray-500 hover:text-gray-700">
+                      </Link>
+
+                      <Link
+                        href={`/${validLocale}/products`}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
                         {t(validLocale, 'nav.products')}
-                      </a>
+                      </Link>
+
                       {session?.user ? (
-                        <a href={`/${validLocale}/account`} className="text-gray-500 hover:text-gray-700">
+                        <Link
+                          href={`/${validLocale}/account`}
+                          className="text-gray-500 hover:text-gray-700"
+                        >
                           {t(validLocale, 'nav.account') || 'Account'}
-                        </a>
+                        </Link>
                       ) : (
-                        <a href={`/${validLocale}/auth/signin`} className="text-gray-500 hover:text-gray-700">
+                        <Link
+                          href={`/${validLocale}/auth/signin`}
+                          className="text-gray-500 hover:text-gray-700"
+                        >
                           {t(validLocale, 'nav.signin')}
-                        </a>
+                        </Link>
                       )}
                     </div>
                   </div>
+
                   <div className="flex items-center space-x-4">
                     {session?.user && (
                       <div className="flex items-center space-x-3">
                         {session.user.image && (
-                          <img
+                          <Image
                             src={session.user.image}
                             alt={session.user.name || 'User'}
-                            className="w-8 h-8 rounded-full"
+                            width={32}
+                            height={32}
+                            className="rounded-full"
                           />
                         )}
-                        <span className="text-sm text-gray-700">
-                          {session.user.name}
-                        </span>
+                        <span className="text-sm text-gray-700">{session.user.name}</span>
                       </div>
                     )}
-                    
-                    <a 
-                      href="/en"
-                      className={`px-2 py-1 text-sm ${validLocale === 'en' ? 'font-bold' : ''}`}
-                    >
+
+                    {/* Language switches — juga internal route: gunakan Link */}
+                    <Link href="/en" className={`px-2 py-1 text-sm ${validLocale === 'en' ? 'font-bold' : ''}`}>
                       EN
-                    </a>
-                    <a 
-                      href="/id"
-                      className={`px-2 py-1 text-sm ${validLocale === 'id' ? 'font-bold' : ''}`}
-                    >
+                    </Link>
+                    <Link href="/id" className={`px-2 py-1 text-sm ${validLocale === 'id' ? 'font-bold' : ''}`}>
                       ID
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </nav>
             </header>
-            
-            <main>
-              {children}
-            </main>
-            
+
+            <main>{children}</main>
+
             <footer className="bg-white border-t border-gray-200">
               <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-                <p className="text-center text-sm text-gray-500">
-                  © 2025 TechMart. All rights reserved.
-                </p>
+                <p className="text-center text-sm text-gray-500">© 2025 TechMart. All rights reserved.</p>
               </div>
             </footer>
           </div>

@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search')
     const categoryId = searchParams.get('categoryId')
     
-    let query = db
+    const query = db
       .select({
         id: products.id,
         name: locale === 'id' ? products.nameId : products.nameEn,
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (categoryId) {
-      conditions.push(eq(products.categoryId, parseInt(categoryId)))
+      conditions.push(eq(products.categoryId, parseInt(categoryId, 10)))
     }
 
     const results = await query
