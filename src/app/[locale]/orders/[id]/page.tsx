@@ -36,12 +36,13 @@ interface OrderDetail {
   }>
 }
 
-export default async function OrderDetailPage({
-  params
-}: {
-  params: { locale: string; id: string }
-}) {
-  const { locale, id } = params
+// Note: props.params is typed as a Promise to match Next.js' async params behavior.
+// We then await it inside the component to get { locale, id }.
+export default async function OrderDetailPage(
+  props: { params: Promise<{ locale: string; id: string }> }
+) {
+  const { locale, id } = await props.params
+
   const session = await auth()
 
   if (!session?.user) {
