@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { products, categories } from '@/lib/db/schema'
-import { eq, like, and, gte, lte, desc } from 'drizzle-orm'
+import { eq, like, and, gte, lte, desc, type SQL } from 'drizzle-orm'
 import AddToCartButton from '@/components/AddToCartButton'
 import { t, type Locale } from '@/lib/i18n'
 
@@ -17,32 +17,43 @@ export default async function ProductsPage({
   searchParams
 }: {
   params: Promise<{ locale: string }>
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }) {
   const { locale } = await params
+  const sp = await searchParams
+
   const validLocale = (['en', 'id'].includes(locale) ? locale : 'en') as Locale
-  
-  const conditions = [eq(products.isActive, true)]
-  
-  if (searchParams.search) {
-    const searchTerm = `%${searchParams.search}%`
+
+  const conditions: any[] = [eq(products.isActive, true)]
+
+  if (sp?.search) {
+    const searchTerm = `%${sp.search}%`
     conditions.push(
-      validLocale === 'id' 
+      validLocale === 'id'
         ? like(products.nameId, searchTerm)
         : like(products.nameEn, searchTerm)
     )
   }
-  
-  if (searchParams.category) {
-    conditions.push(eq(products.categoryId, parseInt(searchParams.category)))
+
+  if (sp?.category) {
+    const catId = parseInt(sp.category, 10)
+    if (!Number.isNaN(catId)) {
+      conditions.push(eq(products.categoryId, catId))
+    }
   }
-  
-  if (searchParams.minPrice) {
-    conditions.push(gte(products.price, searchParams.minPrice))
+
+  if (sp?.minPrice) {
+    const min = parseFloat(sp.minPrice)
+    if (!Number.isNaN(min)) {
+      conditions.push(gte(products.price, min.toString()))
+    }
   }
-  
-  if (searchParams.maxPrice) {
-    conditions.push(lte(products.price, searchParams.maxPrice))
+
+  if (sp?.maxPrice) {
+    const max = parseFloat(sp.maxPrice)
+    if (!Number.isNaN(max)) {
+      conditions.push(lte(products.price, max.toString()))
+    }
   }
 
   const [productsData, categoriesData] = await Promise.all([
@@ -59,7 +70,7 @@ export default async function ProductsPage({
       .where(and(...conditions))
       .orderBy(desc(products.createdAt))
       .limit(20),
-    
+
     db
       .select({
         id: categories.id,
@@ -73,13 +84,13 @@ export default async function ProductsPage({
       <div className="space-y-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <h1 className="text-3xl font-bold text-gray-900">{t(validLocale, 'products.title')}</h1>
-          
+
           <form method="GET" className="flex gap-2">
             <input
               type="text"
               name="search"
               placeholder={t(validLocale, 'products.search')}
-              defaultValue={searchParams.search}
+              defaultValue={sp?.search}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <button
@@ -95,19 +106,19 @@ export default async function ProductsPage({
           <aside className="lg:w-1/4">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-lg font-semibold mb-4">Filters</h3>
-              
+
               <form method="GET" className="space-y-4">
-                {searchParams.search && (
-                  <input type="hidden" name="search" value={searchParams.search} />
+                {sp?.search && (
+                  <input type="hidden" name="search" value={sp.search} />
                 )}
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {t(validLocale, 'products.category')}
                   </label>
                   <select
                     name="category"
-                    defaultValue={searchParams.category}
+                    defaultValue={sp?.category}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">All Categories</option>
@@ -128,14 +139,14 @@ export default async function ProductsPage({
                       type="number"
                       name="minPrice"
                       placeholder="Min"
-                      defaultValue={searchParams.minPrice}
+                      defaultValue={sp?.minPrice}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                     <input
                       type="number"
                       name="maxPrice"
                       placeholder="Max"
-                      defaultValue={searchParams.maxPrice}
+                      defaultValue={sp?.maxPrice}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -158,6 +169,8 @@ export default async function ProductsPage({
                   <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                     <div className="aspect-w-16 aspect-h-9 bg-gray-200">
                       {product.imageUrl && (
+                        // keep as <img> for now; you can replace with next/image if you add width/height or use layout='fill'
+                        // to silence next/image warning you will need to provide proper sizing or a loader
                         <img
                           src={product.imageUrl}
                           alt={product.name}
