@@ -1,5 +1,3 @@
-// src/app/[locale]/admin/orders/page.tsx
-
 import { auth } from '@/lib/auth/config'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'

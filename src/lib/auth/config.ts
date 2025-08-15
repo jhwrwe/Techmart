@@ -24,7 +24,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: '/auth/error',
   },
   callbacks: {
-    // explicitly type parameters to avoid implicit `any`
     async session({
       session,
       user,
