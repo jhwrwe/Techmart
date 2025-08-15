@@ -1,5 +1,3 @@
-// ./src/lib/i18n.ts
-
 export const translations = {
   en: {
     home: {

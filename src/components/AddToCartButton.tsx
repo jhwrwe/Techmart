@@ -40,7 +40,6 @@ export default function AddToCartButton({
   const [isAdding, setIsAdding] = useState(false)
   const [cartItems, setCartItems] = useState<CartItem[]>([])
 
-  // Load cart dari localStorage dengan safe parsing
   useEffect(() => {
     try {
       const savedCart = localStorage.getItem('cart')
