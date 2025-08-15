@@ -1,10 +1,9 @@
-// src/app/[locale]/account/page.tsx
-
 import { auth, signOut } from '@/lib/auth/config'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { orders, orderItems, products, users } from '@/lib/db/schema'
 import { eq, desc, count, sum, and } from 'drizzle-orm'
+import ImagePreview from '@/components/admin/ImagePreview'
 
 interface UserStats {
   totalOrders: number
@@ -278,8 +277,11 @@ export default async function AccountPage({
           {recentOrders.length > 0 && (
             <a
               href={`/${locale}/orders`}
-              className="text-blue-600 hover:text-blue-800 font-medium"
+              className="text-blue-600 hover:text-blue-800 font-medium flex items-center space-x-1"
             >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </a>
           )}
         </div>
@@ -292,22 +294,20 @@ export default async function AccountPage({
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                       {order.firstItem?.imageUrl ? (
-                        <img
+                        <ImagePreview
                           src={order.firstItem.imageUrl}
                           alt={order.firstItem.name}
                           className="w-full h-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                            target.nextElementSibling!.classList.remove('hidden');
-                          }}
+                          showFallbackContainer={false}
+                          fallbackHeight="h-12"
                         />
-                      ) : null}
-                      <div className={`w-full h-full flex items-center justify-center text-gray-400 ${order.firstItem?.imageUrl ? 'hidden' : ''}`}>
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                      </div>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                          </svg>
+                        </div>
+                      )}
                     </div>
 
                     <div>
@@ -363,9 +363,15 @@ export default async function AccountPage({
                   </a>
                   
                   {order.status === 'completed' && (
-                    <button className="text-green-600 hover:text-green-800 text-sm font-medium">
-                    
-                    </button>
+                    <a
+                      href={`/${locale}/products`}
+                      className="text-green-600 hover:text-green-800 text-sm font-medium flex items-center space-x-1"
+                    >
+                      <span>Order Again</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    </a>
                   )}
                 </div>
               </div>
