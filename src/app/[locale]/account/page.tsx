@@ -41,7 +41,6 @@ export default async function AccountPage({
     redirect(`/${locale}/auth/signin`)
   }
 
-  // Get user statistics
   const [totalOrdersResult, totalSpentResult, pendingOrdersResult, completedOrdersResult] = await Promise.all([
     db.select({ count: count() }).from(orders).where(eq(orders.userId, session.user.id)),
     db.select({ total: sum(orders.totalAmount) })
@@ -62,7 +61,6 @@ export default async function AccountPage({
     completedOrders: completedOrdersResult[0]?.count || 0
   }
 
-  // Get recent orders with first item details
   const userOrders = await db
     .select({
       id: orders.id,
@@ -76,7 +74,6 @@ export default async function AccountPage({
     .orderBy(desc(orders.createdAt))
     .limit(5)
 
-  // Get item count and first item for each order
   const recentOrders: RecentOrder[] = await Promise.all(
     userOrders.map(async (order) => {
       const [itemCountResult, firstItemResult] = await Promise.all([
@@ -108,7 +105,6 @@ export default async function AccountPage({
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
-      {/* User Profile Header */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
@@ -159,7 +155,6 @@ export default async function AccountPage({
         </div>
       </div>
 
-      {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center">
@@ -218,7 +213,6 @@ export default async function AccountPage({
         </div>
       </div>
 
-      {/* Quick Actions */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -278,7 +272,6 @@ export default async function AccountPage({
         </div>
       </div>
 
-      {/* Recent Orders */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-gray-900">Recent Orders</h2>
@@ -297,7 +290,6 @@ export default async function AccountPage({
               <div key={order.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-all hover:shadow-md">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    {/* Order Image */}
                     <div className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                       {order.firstItem?.imageUrl ? (
                         <img

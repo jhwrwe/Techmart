@@ -45,7 +45,6 @@ export default async function ProductsPage({
     conditions.push(lte(products.price, searchParams.maxPrice))
   }
 
-  // Fetch products and categories
   const [productsData, categoriesData] = await Promise.all([
     db
       .select({
@@ -93,18 +92,15 @@ export default async function ProductsPage({
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
           <aside className="lg:w-1/4">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-lg font-semibold mb-4">Filters</h3>
               
               <form method="GET" className="space-y-4">
-                {/* Preserve search term */}
                 {searchParams.search && (
                   <input type="hidden" name="search" value={searchParams.search} />
                 )}
                 
-                {/* Category Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {t(validLocale, 'products.category')}
@@ -123,7 +119,6 @@ export default async function ProductsPage({
                   </select>
                 </div>
 
-                {/* Price Range */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     {t(validLocale, 'products.price')} Range
@@ -156,7 +151,6 @@ export default async function ProductsPage({
             </div>
           </aside>
 
-          {/* Products Grid */}
           <main className="lg:w-3/4">
             {productsData.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

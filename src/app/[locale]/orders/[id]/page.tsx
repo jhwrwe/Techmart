@@ -46,7 +46,6 @@ export default async function OrderDetailPage({
     redirect(`/${locale}/auth/signin`)
   }
 
-  // Get order details
   const orderData = await db
     .select({
       id: orders.id,
@@ -84,7 +83,6 @@ export default async function OrderDetailPage({
 
   const order = orderData[0]
 
-  // Check if user can view this order
   if (session.user.role !== 'admin' && order.userId !== session.user.id) {
     redirect(`/${locale}/account`)
   }
@@ -157,7 +155,6 @@ export default async function OrderDetailPage({
         </a>
       </div>
 
-      {/* Order Status */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Order Status</h2>
@@ -181,7 +178,6 @@ export default async function OrderDetailPage({
           </div>
         </div>
 
-        {/* Progress Bar */}
         <div className="mb-6">
           <div className="flex justify-between text-sm text-gray-600 mb-2">
             <span className={orderDetail.status === 'pending' ? 'text-blue-600 font-medium' : ''}>
@@ -263,9 +259,7 @@ export default async function OrderDetailPage({
           </div>
         </div>
 
-        {/* Order Summary & Shipping */}
         <div className="space-y-6">
-          {/* Order Summary */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
             
@@ -289,7 +283,6 @@ export default async function OrderDetailPage({
             </div>
           </div>
 
-          {/* Customer Information */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Customer Information</h2>
             
@@ -324,7 +317,6 @@ export default async function OrderDetailPage({
             </div>
           </div>
 
-          {/* Contact Support */}
           <div className="bg-blue-50 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-blue-900 mb-2">Need Help?</h3>
             <p className="text-blue-700 text-sm mb-4">

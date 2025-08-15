@@ -44,7 +44,6 @@ export default function AddToCartButton({
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const router = useRouter()
 
-  // Load cart from localStorage on component mount
   useEffect(() => {
     const savedCart = localStorage.getItem('cart')
     if (savedCart) {
@@ -65,7 +64,6 @@ export default function AddToCartButton({
       let updatedCart: CartItem[]
 
       if (existingItemIndex >= 0) {
-        // Update existing item
         updatedCart = [...cartItems]
         const newQuantity = updatedCart[existingItemIndex].quantity + selectedQuantity
         
@@ -77,7 +75,6 @@ export default function AddToCartButton({
 
         updatedCart[existingItemIndex].quantity = newQuantity
       } else {
-        // Add new item
         const newItem: CartItem = {
           id: product.id,
           name: locale === 'id' && product.nameId ? product.nameId : (product.nameEn || product.name),
@@ -89,15 +86,11 @@ export default function AddToCartButton({
         updatedCart = [...cartItems, newItem]
       }
 
-      // Save to localStorage and update state
       localStorage.setItem('cart', JSON.stringify(updatedCart))
       setCartItems(updatedCart)
 
-      // Show success feedback
       alert('Product added to cart!')
       
-      // Optional: redirect to cart page
-      // router.push(`/${locale}/cart`)
       
     } catch (error) {
       console.error('Error adding to cart:', error)

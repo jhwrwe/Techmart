@@ -41,7 +41,6 @@ export default async function AdminDashboard({
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header with Back Button */}
         <div className="mb-8">
           <div className="flex items-center mb-6">
             <a
@@ -91,7 +90,6 @@ export default async function AdminDashboard({
           </div>
         </div>
 
-        {/* Enhanced Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border border-gray-100">
             <div className="flex items-center justify-between">
@@ -204,7 +202,6 @@ export default async function AdminDashboard({
           </div>
         </div>
 
-        {/* Enhanced Quick Actions */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           <div className="bg-gradient-to-r from-gray-50 to-blue-50 px-8 py-6 border-b border-gray-200">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center">

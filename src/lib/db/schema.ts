@@ -49,7 +49,6 @@ export const verificationTokens = pgTable('verification_tokens', {
   tokenIdx: index('verification_tokens_token_idx').on(table.token),
 }))
 
-// ===== E-COMMERCE TABLES =====
 export const categories = pgTable('categories', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 100 }).notNull(),

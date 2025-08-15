@@ -70,7 +70,6 @@ export default async function AdminOrdersPage({
   const pageSize = 10
   const offset = (parseInt(page) - 1) * pageSize
 
-  // Build where condition based on status filter
   const whereCondition = statusFilter === 'all' ? undefined : eq(orders.status, statusFilter)
 
   const ordersData = await db
@@ -93,7 +92,6 @@ export default async function AdminOrdersPage({
     .limit(pageSize)
     .offset(offset)
 
-  // Get order items for each order
   const orderIds = ordersData.map(order => order.id)
   const orderItemsData = orderIds.length > 0 ? await db
     .select({
@@ -164,7 +162,6 @@ export default async function AdminOrdersPage({
         </div>
       </div>
 
-      {/* Status Filter */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-lg font-semibold mb-4">Filter Orders</h2>
         <div className="flex flex-wrap gap-2">
@@ -184,7 +181,6 @@ export default async function AdminOrdersPage({
         </div>
       </div>
 
-      {/* Orders List */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         {ordersWithDetails.length > 0 ? (
           <div className="overflow-x-auto">
@@ -314,7 +310,6 @@ export default async function AdminOrdersPage({
         )}
       </div>
 
-      {/* Pagination */}
       {ordersWithDetails.length === pageSize && (
         <div className="flex justify-center">
           <div className="flex space-x-2">

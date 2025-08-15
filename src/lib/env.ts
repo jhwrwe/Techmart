@@ -11,9 +11,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   },
   client: {
-    // NEXT_PUBLIC_APP_URL: z.string().url(),
   },
   experimental__runtimeEnv: {
-    // NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
 })

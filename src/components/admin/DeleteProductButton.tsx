@@ -36,14 +36,12 @@ export default function DeleteProductButton({
       const data = await response.json()
       
       if (data.success) {
-        // Show success message based on action taken
         if (data.deactivated) {
           alert('Product has existing orders and was deactivated instead of deleted.')
         } else if (data.deleted) {
           alert('Product deleted successfully!')
         }
         
-        // Refresh the page to show updated list
         router.refresh()
       } else {
         throw new Error(data.error || 'Failed to delete product')

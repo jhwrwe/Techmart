@@ -90,7 +90,6 @@ export function t(locale: Locale, key: string): string {
   return getTranslation(locale, key)
 }
 
-// Add auth translations
 export const authTranslations = {
   en: {
     welcome: 'Welcome back',

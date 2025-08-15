@@ -11,7 +11,6 @@ export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params
   console.log("Currently in page.tsx, locale:", locale)
 
-  // Ensure locale is valid
   const validLocale = (['en', 'id'].includes(locale) ? locale : 'en') as Locale
   
   const featuredProducts = await db
@@ -23,7 +22,6 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Hero Section */}
       <div className="text-center py-16">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           {t(validLocale, 'home.title')}
@@ -39,7 +37,6 @@ export default async function HomePage({ params }: HomePageProps) {
         </a>
       </div>
 
-      {/* Featured Products */}
       <div className="py-16">
         <h2 className="text-2xl font-bold text-center mb-8">
           {t(validLocale, 'home.featuredProducts')}

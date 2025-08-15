@@ -53,7 +53,6 @@ export default async function AddProductPage({
       redirect(`/${locale}/admin/products`)
     } catch (error) {
       console.error('Failed to create product:', error)
-      // Handle error (you might want to show this to user)
     }
   }
 
@@ -71,7 +70,6 @@ export default async function AddProductPage({
 
       <div className="bg-white rounded-lg shadow-md p-6">
         <form action={createProduct} className="space-y-6">
-          {/* English Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -99,7 +97,6 @@ export default async function AddProductPage({
             </div>
           </div>
 
-          {/* Descriptions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -126,7 +123,6 @@ export default async function AddProductPage({
             </div>
           </div>
 
-          {/* Price and Compare Price */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -161,7 +157,6 @@ export default async function AddProductPage({
             </div>
           </div>
 
-          {/* Stock and Category */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -195,7 +190,6 @@ export default async function AddProductPage({
             </div>
           </div>
 
-          {/* Image URL */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Image URL
@@ -211,7 +205,6 @@ export default async function AddProductPage({
             </p>
           </div>
 
-          {/* Featured Product */}
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -224,7 +217,6 @@ export default async function AddProductPage({
             </label>
           </div>
 
-          {/* Submit Button */}
           <div className="flex justify-end space-x-4">
             <a
               href={`/${locale}/admin/products`}

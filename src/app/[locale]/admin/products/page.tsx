@@ -41,7 +41,6 @@ export default async function AdminProductsPage({
 
   return (
     <div className="space-y-8">
-      {/* Breadcrumb Navigation */}
       <nav className="flex items-center space-x-2 text-sm text-gray-500">
         <a 
           href={`/${locale}/admin`} 
@@ -55,7 +54,6 @@ export default async function AdminProductsPage({
         <span className="text-gray-900 font-medium">Products</span>
       </nav>
 
-      {/* Header with Back Button */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <a
@@ -77,7 +75,6 @@ export default async function AdminProductsPage({
         </a>
       </div>
 
-      {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-md text-center">
           <div className="text-2xl font-bold text-blue-600 mb-2">
@@ -108,7 +105,6 @@ export default async function AdminProductsPage({
         </div>
       </div>
 
-      {/* Products Table */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">

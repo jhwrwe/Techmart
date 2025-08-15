@@ -71,7 +71,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Generate slug from English name
     const slug = nameEn
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')

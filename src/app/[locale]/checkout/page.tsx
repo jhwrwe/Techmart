@@ -237,7 +237,6 @@ export default function CheckoutPage({
           </form>
         </div>
 
-        {/* Order Summary */}
         <div className="bg-white rounded-lg shadow-md p-6 h-fit">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
           
@@ -295,7 +294,6 @@ export default function CheckoutPage({
             </div>
           </div>
 
-          {/* Shipping Notice */}
           {total > 100 ? (
             <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
               <p className="text-green-800 text-sm font-medium">

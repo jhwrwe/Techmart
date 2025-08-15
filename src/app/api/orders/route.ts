@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate items and check stock
     for (const item of body.items) {
       const product = await db
         .select({ stock: products.stock })
@@ -68,12 +67,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Create shipping address string
     const shippingAddress = `${body.customerInfo.firstName} ${body.customerInfo.lastName}\n${body.customerInfo.address}\n${body.customerInfo.city}, ${body.customerInfo.postalCode}${body.customerInfo.phone ? `\nPhone: ${body.customerInfo.phone}` : ''}`
 
-    // Create order in database transaction
     const result = await db.transaction(async (tx) => {
-      // Create order
       const newOrder = await tx
         .insert(orders)
         .values({
@@ -88,9 +84,7 @@ export async function POST(request: NextRequest) {
 
       const orderId = newOrder[0].id
 
-      // Create order items and update product stock
       for (const item of body.items) {
-        // Add order item
         await tx.insert(orderItems).values({
           orderId,
           productId: item.id,
@@ -98,7 +92,6 @@ export async function POST(request: NextRequest) {
           price: item.price.toString(),
         })
 
-        // Update product stock
         await tx
           .update(products)
           .set({ 
@@ -143,13 +136,10 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10')
     const offset = (page - 1) * limit
 
-    // Build where condition
     let whereCondition
     if (session.user.role === 'admin') {
-      // Admin can see all orders
       whereCondition = status ? eq(orders.status, status) : undefined
     } else {
-      // Users can only see their own orders
       whereCondition = status 
         ? eq(orders.userId, session.user.id) && eq(orders.status, status)
         : eq(orders.userId, session.user.id)

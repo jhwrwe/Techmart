@@ -17,7 +17,6 @@ export default async function EditProductPage({
     redirect(`/${locale}/auth/signin`)
   }
 
-  // Get the product to edit
   const [product] = await db
     .select()
     .from(products)
@@ -27,7 +26,6 @@ export default async function EditProductPage({
     notFound()
   }
 
-  // Get all categories
   const allCategories = await db.select().from(categories)
 
   async function updateProduct(formData: FormData) {
@@ -70,7 +68,6 @@ export default async function EditProductPage({
       redirect(`/${locale}/admin/products`)
     } catch (error) {
       console.error('Failed to update product:', error)
-      // Handle error (you might want to show this to user)
     }
   }
 
@@ -88,7 +85,6 @@ export default async function EditProductPage({
 
       <div className="bg-white rounded-lg shadow-md p-6">
         <form action={updateProduct} className="space-y-6">
-          {/* English Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -118,7 +114,6 @@ export default async function EditProductPage({
             </div>
           </div>
 
-          {/* Descriptions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -147,7 +142,6 @@ export default async function EditProductPage({
             </div>
           </div>
 
-          {/* Price and Compare Price */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -184,7 +178,6 @@ export default async function EditProductPage({
             </div>
           </div>
 
-          {/* Stock and Category */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -220,7 +213,6 @@ export default async function EditProductPage({
             </div>
           </div>
 
-          {/* Image URL */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Image URL
@@ -237,7 +229,6 @@ export default async function EditProductPage({
             </p>
           </div>
 
-          {/* Featured and Active Status */}
           <div className="space-y-4">
             <div className="flex items-center">
               <input
@@ -266,7 +257,6 @@ export default async function EditProductPage({
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="flex justify-end space-x-4">
             <a
               href={`/${locale}/admin/products`}

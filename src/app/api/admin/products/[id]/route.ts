@@ -12,7 +12,6 @@ export async function DELETE(
     const { id } = await params
     const session = await auth()
     
-    // Check if user is admin
     if (!session?.user || session.user.role !== 'admin') {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
@@ -29,7 +28,6 @@ export async function DELETE(
       )
     }
     
-    // Check if product exists
     const [existingProduct] = await db
       .select()
       .from(products)
@@ -42,7 +40,6 @@ export async function DELETE(
       )
     }
 
-    // Check if product has any orders
     const existingOrders = await db
       .select()
       .from(orderItems)
@@ -50,7 +47,6 @@ export async function DELETE(
       .limit(1)
 
     if (existingOrders.length > 0) {
-      // Instead of deleting, deactivate the product
       await db
         .update(products)
         .set({ 
@@ -66,7 +62,6 @@ export async function DELETE(
       })
     }
 
-    // Safe to delete if no orders exist
     await db
       .delete(products)
       .where(eq(products.id, productId))

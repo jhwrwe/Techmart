@@ -23,7 +23,6 @@ export default async function LocaleLayout({
   const { locale } = await params
   const session = await auth()
   
-  // Ensure locale is valid
   const validLocale = (['en', 'id'].includes(locale) ? locale : 'en') as Locale
 
   return (
@@ -59,7 +58,6 @@ export default async function LocaleLayout({
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
-                    {/* User info when signed in */}
                     {session?.user && (
                       <div className="flex items-center space-x-3">
                         {session.user.image && (
@@ -75,7 +73,6 @@ export default async function LocaleLayout({
                       </div>
                     )}
                     
-                    {/* Language switcher */}
                     <a 
                       href="/en"
                       className={`px-2 py-1 text-sm ${validLocale === 'en' ? 'font-bold' : ''}`}

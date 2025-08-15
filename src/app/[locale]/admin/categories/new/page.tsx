@@ -24,11 +24,9 @@ export default async function AddCategoryPage({
     const image = formData.get('image') as string
 
     if (!nameEn || !nameId) {
-      // In a real app, you'd want to handle this error properly
       return
     }
 
-    // Generate slug from English name
     const slug = nameEn
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
@@ -38,7 +36,7 @@ export default async function AddCategoryPage({
 
     try {
       await db.insert(categories).values({
-        name: nameEn, // Default to English
+        name: nameEn, 
         nameEn,
         nameId,
         slug,
@@ -49,14 +47,12 @@ export default async function AddCategoryPage({
       redirect(`/${locale}/admin/categories`)
     } catch (error) {
       console.error('Failed to create category:', error)
-      // Handle error (you might want to show this to user)
     }
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center mb-6">
             <a
@@ -76,7 +72,6 @@ export default async function AddCategoryPage({
           </div>
         </div>
 
-        {/* Form */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           <div className="bg-gradient-to-r from-gray-50 to-blue-50 px-8 py-6 border-b border-gray-200">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center">
@@ -89,7 +84,6 @@ export default async function AddCategoryPage({
 
           <form action={createCategory} className="p-8">
             <div className="space-y-6">
-              {/* Category Names */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -121,7 +115,6 @@ export default async function AddCategoryPage({
                 </div>
               </div>
 
-              {/* Category Image */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category Image URL
@@ -137,7 +130,6 @@ export default async function AddCategoryPage({
                 </p>
               </div>
 
-              {/* Preview */}
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                   <svg className="w-5 h-5 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,7 +149,6 @@ export default async function AddCategoryPage({
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                 <a
                   href={`/${locale}/admin/categories`}

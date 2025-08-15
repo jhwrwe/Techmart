@@ -26,7 +26,6 @@ async function updateUserRole(userId: string, newRole: string) {
     throw new Error('Unauthorized')
   }
 
-  // Prevent admin from changing their own role
   if (session.user.id === userId) {
     throw new Error('Cannot change your own role')
   }
@@ -56,10 +55,8 @@ export default async function AdminUsersPage({
   const pageSize = 10
   const offset = (parseInt(page) - 1) * pageSize
 
-  // Build where condition based on role filter
   const whereCondition = roleFilter === 'all' ? undefined : eq(users.role, roleFilter)
 
-  // Get users with basic info
   const usersData = await db
     .select({
       id: users.id,
@@ -131,7 +128,6 @@ export default async function AdminUsersPage({
         </div>
       </div>
 
-      {/* Role Filter */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-lg font-semibold mb-4">Filter Users</h2>
         <div className="flex flex-wrap gap-2">
@@ -151,7 +147,6 @@ export default async function AdminUsersPage({
         </div>
       </div>
 
-      {/* Users List */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         {usersWithStats.length > 0 ? (
           <div className="overflow-x-auto">
@@ -287,7 +282,6 @@ export default async function AdminUsersPage({
         )}
       </div>
 
-      {/* User Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="flex items-center">
@@ -352,7 +346,6 @@ export default async function AdminUsersPage({
         </div>
       </div>
 
-      {/* Pagination */}
       {usersWithStats.length === pageSize && (
         <div className="flex justify-center">
           <div className="flex space-x-2">
