@@ -6,21 +6,31 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "postbuild": "npm run db:migrate",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.10.0",
     "@next/bundle-analyzer": "^15.4.6",
+    "@t3-oss/env-nextjs": "^0.13.8",
+    "dotenv": "^17.2.1",
     "drizzle-orm": "^0.44.4",
     "next": "15.4.6",
-    "next-auth": "^4.24.11",
-    "next-intl": "^4.3.4",
+    "next-auth": "^5.0.0-beta.29",
+    "postcss": "^8.5.6",
     "postgres": "^3.4.7",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.12",
     "@types/node": "^20",
     "@types/pg": "^8.15.5",
     "@types/react": "^19",
@@ -28,7 +38,8 @@
     "drizzle-kit": "^0.31.4",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.12",
+    "tsx": "^4.20.3",
     "typescript": "^5"
   }
 }
