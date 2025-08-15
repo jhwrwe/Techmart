@@ -1,6 +1,8 @@
+import Image from 'next/image'
 import { db } from '@/lib/db'
 import { products, categories } from '@/lib/db/schema'
-import { eq, like, and, gte, lte, desc, type SQL } from 'drizzle-orm'
+import { eq, like, and, gte, lte, desc } from 'drizzle-orm'
+import type { SQL } from 'drizzle-orm'
 import AddToCartButton from '@/components/AddToCartButton'
 import { t, type Locale } from '@/lib/i18n'
 
@@ -24,7 +26,7 @@ export default async function ProductsPage({
 
   const validLocale = (['en', 'id'].includes(locale) ? locale : 'en') as Locale
 
-  const conditions: any[] = [eq(products.isActive, true)]
+  const conditions: SQL[] = [eq(products.isActive, true)]
 
   if (sp?.search) {
     const searchTerm = `%${sp.search}%`
@@ -169,12 +171,13 @@ export default async function ProductsPage({
                   <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                     <div className="aspect-w-16 aspect-h-9 bg-gray-200">
                       {product.imageUrl && (
-                        // keep as <img> for now; you can replace with next/image if you add width/height or use layout='fill'
-                        // to silence next/image warning you will need to provide proper sizing or a loader
-                        <img
+                        <Image
                           src={product.imageUrl}
                           alt={product.name}
+                          width={400}
+                          height={225}
                           className="w-full h-48 object-cover"
+                          priority={false}
                         />
                       )}
                     </div>
